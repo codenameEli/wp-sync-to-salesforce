@@ -9,5 +9,9 @@
             "email": "eli@launchdm.com"
         }
     ],
-    "require": {}
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {"WPSyncSalesforce\\": "lib"}
+    }
 }
