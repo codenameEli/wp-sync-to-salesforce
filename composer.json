@@ -1,0 +1,13 @@
+{
+    "name": "eli/wp-sync-to-salesforce",
+    "description": "WordPress plugin that syncs website meta to Salesforce",
+    "type": "wordpress-plugin",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Eli Dalbey",
+            "email": "eli@launchdm.com"
+        }
+    ],
+    "require": {}
+}
