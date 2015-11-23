@@ -26,15 +26,28 @@ Version: 0.1
 
 namespace WPSyncSalesforce;
 
+use WPSyncSalesforce\ScheduledEvent;
+
 class WPSyncSalesforce {
 
     private static $instance = null;
 
+    private $scheduled_event;
+
     private function __construct() {
+
 
         $this->setup_autoload();
 
-        $this->setup_includes();
+        $this->setup_actions();
+        $this->create_connection();
+
+        $this->scheduled_event = new ScheduledEvent( time(), 'hourly', 'wp_sync_to_salesforce' );
+
+        $this->scheduled_event->do_event( function() {
+
+            $this->create_connection();
+        });
     }
 
     public static function instance() {
@@ -57,24 +70,9 @@ class WPSyncSalesforce {
         return plugins_url( 'wp-sync-to-salesforce' );
     }
 
-    public static function get_js_url() {
+    public static function get_salesforce_toolkit_dir() {
 
-        return self::get_plugin_url() . '/js/';
-    }
-
-    public static function get_css_url() {
-
-        return self::get_plugin_url() . '/css/';
-    }
-
-    public static function get_images_url() {
-
-        return self::get_plugin_url() . '/images/';
-    }
-
-    public static function get_include_dir() {
-
-        return self::get_plugin_dir() . 'includes/';
+        return plugin_dir_path( __FILE__ ) . 'vendor/developerforce/force.com-toolkit-for-php';
     }
 
     public static function get_vendor_dir() {
@@ -82,14 +80,29 @@ class WPSyncSalesforce {
         return self::get_plugin_dir() . 'vendor/';
     }
 
-    private function setup_includes() {
+    public function on_activate() {
 
-        $path = self::get_include_dir() . '*.php';
+        $this->scheduled_event->register();
+    }
 
-        foreach ( glob( $path ) as $file ) {
+    public function create_connection() {
 
-            include( $file );
-        }
+        require_once( self::get_plugin_dir() . 'misc/globalconstants.php' );
+        require_once( self::get_plugin_dir() . 'soapclient/SforceEnterpriseClient.php');
+
+        $sf_connection = new \SforceEnterpriseClient();
+
+        $sf_connection->createConnection( self::get_plugin_dir() . 'soapclient/enterprise.wsdl.xml' );
+        $sf_connection->login( $USERNAME, $PASSWORD.$TOKEN );
+
+        // $query = "SELECT Id, FirstName, LastName, Phone from Contact";
+        // $response = $sf_connection->query($query);
+
+        // echo "Results of query '$query'<br/><br/>\n";
+        // foreach ($response->records as $record) {
+        //     echo $record->Id . ": " . $record->FirstName . " "
+        //         . $record->LastName . " " . $record->Phone . "<br/>\n";
+        // }
     }
 
     private function setup_autoload() {
@@ -104,7 +117,8 @@ class WPSyncSalesforce {
 
     private function setup_actions() {
 
-        add_action( 'init', array( $this, 'on_init' ) );
+        // add_action( 'init', array( $this, 'on_init' ) );
+        register_activation_hook( __FILE__, array( $this, 'on_activate' ) );
     }
 }
 
