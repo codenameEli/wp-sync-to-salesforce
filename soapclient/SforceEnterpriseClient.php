@@ -59,7 +59,7 @@ class SforceEnterpriseClient extends SforceBaseClient {
     		}
     	}
     	// ------
-    	
+
       $sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
 
     	// FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #2)
@@ -92,9 +92,9 @@ class SforceEnterpriseClient extends SforceBaseClient {
     		}
     	}
     	// ------
-    	
+
     	$sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
-    	
+
     	// FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #2)
     	if($xmlStr != '') {
     		$sObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
@@ -129,7 +129,7 @@ class SforceEnterpriseClient extends SforceBaseClient {
     	}
       }
       // ------
-    	
+
       $sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
 
 	  // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #2)
