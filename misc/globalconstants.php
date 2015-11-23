@@ -1,10 +1,7 @@
-<?php 
-/*
-$USERNAME = 'username@sample.com';
-$PASSWORD = 'changeme';
-*/
+<?php
 
-$USERNAME = 'dfclab1@salesforce.com';
-$PASSWORD = 'sforce123';
+$USERNAME = 'elidalbey@launchdm.com';
+$PASSWORD = 'Salesforceistheworst1!';
+$TOKEN = 'ZLBCDeX4olVc04FVHcGvgdsW';
 
 ?>
